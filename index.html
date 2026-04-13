@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tools Usage — RentoMojo</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F4F2EE;
+  --surface: #FFFFFF;
+  --surface2: #F9F8F5;
+  --border: #E4E1D9;
+  --border-hover: #C8C4BB;
+  --text: #1C1B18;
+  --text-2: #6B6760;
+  --text-3: #A8A49E;
+  --accent: #FF4F1F;
+  --accent-dark: #D93D10;
+  --accent-light: #FFF0EB;
+  --green: #0B7B4E;
+  --green-light: #E6F5EE;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 16px 64px;
+  color: var(--text);
+}
+
+/* Header */
+.page-header {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 32px;
+  animation: fadeUp 0.5s ease both;
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.brand-dot {
+  width: 10px; height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.brand-name {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.page-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(28px, 5vw, 38px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.page-title span { color: var(--accent); }
+
+.page-sub {
+  font-size: 15px;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+/* Card */
+.form-card {
+  width: 100%;
+  max-width: 600px;
+  background: var(--surface);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  animation: fadeUp 0.5s 0.1s ease both;
+}
+
+.card-accent-bar {
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), #FF8C6B);
+}
+
+.card-body { padding: 32px 28px; }
+
+/* Section label */
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 8px;
+}
+
+/* Dropdown */
+.field-group { margin-bottom: 28px; }
+
+.field-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.select-wrap {
+  position: relative;
+}
+
+.team-select {
+  width: 100%;
+  padding: 13px 44px 13px 16px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.team-select:focus { border-color: var(--accent); background: var(--surface); }
+.team-select:hover { border-color: var(--border-hover); }
+
+.select-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text-3);
+}
+
+/* Notice box */
+.notice-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--accent-light);
+  border: 1px solid #FDDDD4;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 24px;
+}
+
+.notice-icon {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--accent);
+}
+
+.notice-text {
+  font-size: 13px;
+  color: #7A2B10;
+  line-height: 1.5;
+}
+
+/* Table header */
+.tools-header {
+  display: grid;
+  grid-template-columns: 1fr 130px 36px;
+  gap: 10px;
+  padding: 0 0 8px;
+  border-bottom: 1.5px solid var(--border);
+  margin-bottom: 12px;
+}
+
+.col-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+/* Tool rows */
+.tools-list { display: flex; flex-direction: column; gap: 10px; }
+
+.tool-row {
+  display: grid;
+  grid-template-columns: 1fr 130px 36px;
+  gap: 10px;
+  align-items: center;
+  animation: rowIn 0.25s ease both;
+}
+
+@keyframes rowIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tool-input {
+  width: 100%;
+  padding: 11px 14px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.tool-input:focus { border-color: var(--accent); background: var(--surface); }
+.tool-input:hover { border-color: var(--border-hover); }
+.tool-input::placeholder { color: var(--text-3); }
+
+.user-count-input {
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Remove row button */
+.remove-btn {
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--border);
+  background: none;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--text-3);
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+
+.remove-btn:hover {
+  border-color: #F5C6C0;
+  background: #FFF5F3;
+  color: #D93D10;
+}
+
+.remove-btn.hidden { visibility: hidden; pointer-events: none; }
+
+/* Add more button */
+.add-row-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  padding: 10px 16px;
+  background: none;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  width: 100%;
+  justify-content: center;
+}
+
+.add-row-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+.add-row-btn svg { width: 16px; height: 16px; }
+
+/* Divider */
+.divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+/* Submit */
+.submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.submit-btn:hover:not(:disabled) { background: var(--accent-dark); }
+.submit-btn:active:not(:disabled) { transform: scale(0.99); }
+.submit-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* Success screen */
+.success-screen {
+  display: none;
+  text-align: center;
+  padding: 48px 28px;
+}
+
+.success-screen.visible { display: block; }
+
+.success-ring {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: var(--green-light);
+  border: 2px solid #9DE5C5;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.success-ring svg { width: 34px; height: 34px; color: var(--green); }
+
+.success-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.success-sub {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.6;
+  margin-bottom: 28px;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.success-meta {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  text-align: left;
+  margin-bottom: 28px;
+}
+
+.meta-row {
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.meta-key { color: var(--text-3); min-width: 80px; }
+.meta-val { color: var(--text); font-weight: 500; }
+
+.another-btn {
+  padding: 12px 28px;
+  background: var(--text);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.another-btn:hover { opacity: 0.8; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--text);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  z-index: 999;
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.success { background: var(--green); }
+.toast.error { background: #C0392B; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Row count badge */
+.row-count {
+  font-size: 12px;
+  color: var(--text-3);
+  font-weight: 400;
+  margin-left: 6px;
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand-row">
+    <div class="brand-dot"></div>
+    <span class="brand-name">RentoMojo</span>
+  </div>
+  <h1 class="page-title">AI Tools<br><span>Usage Tracker</span></h1>
+  <p class="page-sub">Help us understand which AI tools your team is using and how many people are on board.</p>
+</div>
+
+<div class="form-card">
+  <div class="card-accent-bar"></div>
+
+  <div id="form-view">
+    <div class="card-body">
+
+      <!-- Team dropdown -->
+      <div class="field-group">
+        <label class="field-label" for="team-select">Your Team</label>
+        <div class="select-wrap">
+          <select class="team-select" id="team-select" onchange="checkReady()">
+            <option value="" disabled selected>Select your department…</option>
+            <option>Product &amp; Tech</option>
+            <option>Capital &amp; Resourcing</option>
+            <option>Marketing</option>
+            <option>Customer Experience</option>
+            <option>Data &amp; Analytics</option>
+            <option>Finance &amp; Accounts</option>
+            <option>Legal &amp; Secretarial</option>
+            <option>Operations</option>
+            <option>Retail &amp; Presales</option>
+            <option>People</option>
+          </select>
+          <svg class="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 10l5 5 5-5z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Notice -->
+      <div class="notice-box">
+        <svg class="notice-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        <p class="notice-text">Please enter the AI tools used by your team along with the number of users for each tool.</p>
+      </div>
+
+      <!-- Tools table -->
+      <div class="section-label">AI Tools Used <span class="row-count" id="row-count">(1 tool)</span></div>
+
+      <div class="tools-header">
+        <span class="col-label">AI Tool Name</span>
+        <span class="col-label">No. of Users</span>
+        <span></span>
+      </div>
+
+      <div class="tools-list" id="tools-list">
+        <!-- First row inserted by JS -->
+      </div>
+
+      <button class="add-row-btn" onclick="addRow()">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+        Add Another Tool
+      </button>
+
+      <div class="divider"></div>
+
+      <button class="submit-btn" id="submit-btn" onclick="submitForm()" disabled>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        Submit Data
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Success screen -->
+  <div class="success-screen" id="success-screen">
+    <div class="success-ring">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+    </div>
+    <div class="success-title">Data Submitted!</div>
+    <p class="success-sub">Your AI tools data has been recorded in the spreadsheet successfully.</p>
+    <div class="success-meta" id="success-meta"></div>
+    <button class="another-btn" onclick="resetForm()">Submit Another Response</button>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── CONFIG ──
+  const APPS_SCRIPT_URL = 'https://script.google.com/a/macros/rentomojo.com/s/AKfycbz1Hz28GScAIT29lwf74GlnPyi_YlvL_aIsK-oE4c-XsVS1T8PSTjKGpOBZ54AL101OZQ/exec';
+  // ───────────
+
+  let rowCount = 0;
+
+  function addRow(toolName = '', userCount = '') {
+    rowCount++;
+    const list = document.getElementById('tools-list');
+    const row = document.createElement('div');
+    row.className = 'tool-row';
+    row.dataset.id = rowCount;
+    row.innerHTML = `
+      <input class="tool-input" type="text" placeholder="e.g. ChatGPT, Copilot…" value="${toolName}" oninput="checkReady()" />
+      <input class="tool-input user-count-input" type="number" min="1" placeholder="0" value="${userCount}" oninput="checkReady()" />
+      <button class="remove-btn" onclick="removeRow(this)" title="Remove">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    `;
+    list.appendChild(row);
+    updateRemoveBtns();
+    updateRowCount();
+    // Focus the tool name input of the new row
+    if (!toolName) row.querySelector('input').focus();
+    checkReady();
+  }
+
+  function removeRow(btn) {
+    const row = btn.closest('.tool-row');
+    row.style.opacity = '0';
+    row.style.transform = 'translateY(-4px)';
+    row.style.transition = 'opacity 0.2s, transform 0.2s';
+    setTimeout(() => {
+      row.remove();
+      updateRemoveBtns();
+      updateRowCount();
+      checkReady();
+    }, 200);
+  }
+
+  function updateRemoveBtns() {
+    const rows = document.querySelectorAll('.tool-row');
+    rows.forEach((r, i) => {
+      const btn = r.querySelector('.remove-btn');
+      btn.classList.toggle('hidden', rows.length === 1);
+    });
+  }
+
+  function updateRowCount() {
+    const n = document.querySelectorAll('.tool-row').length;
+    document.getElementById('row-count').textContent = `(${n} tool${n !== 1 ? 's' : ''})`;
+  }
+
+  function getRows() {
+    return Array.from(document.querySelectorAll('.tool-row')).map(row => {
+      const inputs = row.querySelectorAll('input');
+      return { tool: inputs[0].value.trim(), users: inputs[1].value.trim() };
+    });
+  }
+
+  function checkReady() {
+    const team = document.getElementById('team-select').value;
+    const rows = getRows();
+    const valid = team && rows.some(r => r.tool && r.users);
+    document.getElementById('submit-btn').disabled = !valid;
+  }
+
+  async function submitForm() {
+    const team = document.getElementById('team-select').value;
+    const rows = getRows().filter(r => r.tool && r.users);
+
+    if (!team || rows.length === 0) return;
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="white" style="animation:spin 0.8s linear infinite"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg> Submitting…`;
+
+    showToast('Sending data…');
+
+    const payload = { team, rows };
+
+    try {
+      if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_DEPLOYED_URL_HERE') {
+        await new Promise(r => setTimeout(r, 1800));
+        showSuccessScreen(team, rows);
+        return;
+      }
+
+      const resp = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await resp.json();
+
+      if (data.success) {
+        showSuccessScreen(team, rows);
+      } else {
+        throw new Error(data.error || 'Submission failed');
+      }
+    } catch (e) {
+      showToast('Error: ' + e.message, 'error');
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Submit Data`;
+    }
+  }
+
+  function showSuccessScreen(team, rows) {
+    document.getElementById('form-view').style.display = 'none';
+    const sc = document.getElementById('success-screen');
+    sc.classList.add('visible');
+
+    const meta = document.getElementById('success-meta');
+    meta.innerHTML = `
+      <div class="meta-row"><span class="meta-key">Team</span><span class="meta-val">${team}</span></div>
+      <div class="meta-row"><span class="meta-key">Tools</span><span class="meta-val">${rows.length} tool${rows.length !== 1 ? 's' : ''} logged</span></div>
+      <div class="meta-row"><span class="meta-key">Time</span><span class="meta-val">${new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</span></div>
+    `;
+    showToast('Submitted successfully!', 'success');
+  }
+
+  function resetForm() {
+    document.getElementById('form-view').style.display = 'block';
+    document.getElementById('success-screen').classList.remove('visible');
+    document.getElementById('team-select').value = '';
+    document.getElementById('tools-list').innerHTML = '';
+    rowCount = 0;
+    addRow();
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Submit Data`;
+  }
+
+  function showToast(msg, type = '') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (type ? ' ' + type : '');
+    t.classList.add('show');
+    clearTimeout(t._t);
+    t._t = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // Init first row
+  addRow();
+</script>
+</body>
+</html>
